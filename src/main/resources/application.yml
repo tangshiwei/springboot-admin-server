@@ -1,0 +1,33 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: admin-server
+  profiles:
+    active: secure
+  security:
+    user:
+      name: admin
+      password: 123456
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    metadata-map:
+      user.name: ${spring.security.user.name}         #These two are needed so that the server
+      user.password: ${spring.security.user.password} #can access the protected client endpoints
+    health-check-url-path: /actuator/health
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://localhost:8200/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
